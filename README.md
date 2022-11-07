@@ -1,4 +1,4 @@
-# Tracing & Monitoring with Opentelemetry and Prometheus
+# ASP.NET Core 6 tracing & monitoring with Opentelemetry and Prometheus
 
 This demo contains client / server applications that use the
 Opentelemetry .net library for instrumentation and for sending telemetry data
