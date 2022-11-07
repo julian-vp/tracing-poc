@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\tools\kompose\kompose.exe convert --chart
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gatewayapi
+  name: gatewayapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gatewayapi
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\tools\kompose\kompose.exe convert --chart
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gatewayapi
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:5208
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: otel-collector:4317
+            - name: locationsapi_ENDPOINT
+              value: locationsapi:5218
+            - name: weathersapi_ENDPOINT
+              value: weathersapi:5290
+          image: gatewayapi
+          name: gatewayapi
+          ports:
+            - containerPort: 5208
+          resources: {}
+      restartPolicy: Always
+status: {}

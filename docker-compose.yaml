@@ -1,0 +1,88 @@
+version: "2"
+services:
+
+  # Jaeger
+  jaeger-all-in-one:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14268"
+      - "14250"
+
+  # Zipkin
+  zipkin-all-in-one:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+
+  # Collector
+  otel-collector:
+    image: ${OTELCOL_IMG}
+    command:
+      [
+        "--config=/etc/otel-collector-config.yaml",
+        "${OTELCOL_ARGS}"
+      ]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "1888:1888" # pprof extension
+      - "8888:8888" # Prometheus metrics exposed by the collector
+      - "8889:8889" # Prometheus exporter metrics
+      - "13133:13133" # health_check extension
+      - "4317:4317" # OTLP gRPC receiver
+      - "55679:55679" # zpages extension
+    depends_on:
+      - jaeger-all-in-one
+      - zipkin-all-in-one
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  locationsapi:
+    build:
+      dockerfile: ./LocationsApi/Dockerfile
+      context: .
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5218
+    ports:
+      - 5218:5218 
+    depends_on:
+      - otel-collector
+
+  weathersapi:
+    build:
+      dockerfile: ./WeatherForcastApi/Dockerfile
+      context: .
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5290
+    ports:
+      - 5290:5290
+    depends_on:
+      - otel-collector
+
+  gatewayapi:
+    build:
+      dockerfile: ./GatewayApi/Dockerfile
+      context: .
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5208
+      - weathersapi_ENDPOINT=weathersapi:5290
+      - locationsapi_ENDPOINT=locationsapi:5218
+    ports:
+      - 5208:5208
+    depends_on:
+      - otel-collector
+      - locationsapi
+      - weathersapi

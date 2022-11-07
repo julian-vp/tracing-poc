@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\tools\kompose\kompose.exe convert --chart
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: weathersapi
+  name: weathersapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: weathersapi
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\tools\kompose\kompose.exe convert --chart
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: weathersapi
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:5290
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: otel-collector:4317
+          image: weathersapi
+          name: weathersapi
+          ports:
+            - containerPort: 5290
+          resources: {}
+      restartPolicy: Always
+status: {}

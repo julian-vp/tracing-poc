@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\tools\kompose\kompose.exe convert --chart
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gatewayapi
+  name: gatewayapi
+spec:
+  ports:
+    - name: "5208"
+      port: 5208
+      targetPort: 5208
+  selector:
+    io.kompose.service: gatewayapi
+status:
+  loadBalancer: {}
