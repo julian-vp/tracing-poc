@@ -10,9 +10,9 @@ number of http requests and latency.
 
 The applications are also exposing standard dotnet/http Prometheus metrics that are automatically scrapped by Prometheus instance based on the targets specified in `prometheus.yml`.
 
-This demo implements the following simple flow of microservices:
+This demo implements the following simple flow of microservices (visualization from Zipkin):
 
-<img src="diagram.png" alt="drawing" style="width:600px;"/>
+<img src="zipkin-diagram.png" alt="drawing" style="width:600px;"/>
 
 - The client and server send data directly to the OTel Collector;
 
