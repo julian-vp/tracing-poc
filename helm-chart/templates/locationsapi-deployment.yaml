@@ -28,13 +28,13 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
             - name: ASPNETCORE_URLS
-              value: http://+:5218
+              value: "http://+:{{ .Values.application.locationsapiPort }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: otel-collector:4317
-          image: locationsapi
+              value: {{ .Values.application.otelExporterOtlpEndpoint }}
+          image: {{ .Values.image.locationsapiImage }}
           name: locationsapi
           ports:
-            - containerPort: 5218
+            - containerPort: {{ .Values.application.locationsapiPort }}
           resources: {}
       restartPolicy: Always
 status: {}

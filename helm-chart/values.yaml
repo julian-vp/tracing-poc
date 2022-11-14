@@ -1,0 +1,21 @@
+
+
+image:
+  jaegerImage: jaegertracing/all-in-one:latest
+  zipkinImage: openzipkin/zipkin:latest
+  otelImage: otel/opentelemetry-collector-contrib-dev:latest
+  prometheusImage: prom/prometheus:latest
+  gatewayapiImage: iparaian/tracing-poc-gatewayapi:latest
+  weathersapiImage: iparaian/tracing-poc-weathersapi:latest
+  locationsapiImage: iparaian/tracing-poc-locationsapi:latest
+
+service:
+  type: ClusterIP
+  
+application:
+  gatewayapiPort: 80
+  weathersapiPort: 80
+  locationsapiPort: 80
+  otelExporterOtlpEndpoint: 'http://otel-collector:4317'
+  weathersapiEndpoint: 'http://weathersapi:5290'
+  locationsapiEndpoint: 'http://locationsapi:5218'

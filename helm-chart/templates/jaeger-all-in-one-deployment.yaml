@@ -24,7 +24,7 @@ spec:
         io.kompose.service: jaeger-all-in-one
     spec:
       containers:
-        - image: jaegertracing/all-in-one:latest
+        - image: {{ .Values.image.jaegerImage }}
           name: jaeger-all-in-one
           ports:
             - containerPort: 16686

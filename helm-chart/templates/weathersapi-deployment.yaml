@@ -28,13 +28,13 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
             - name: ASPNETCORE_URLS
-              value: http://+:5290
+              value: "http://+:{{ .Values.application.weathersapiPort }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: otel-collector:4317
-          image: weathersapi
+              value: {{ .Values.application.otelExporterOtlpEndpoint }}
+          image: {{ .Values.image.weathersapiImage }}
           name: weathersapi
           ports:
-            - containerPort: 5290
+            - containerPort: {{ .Values.application.weathersapiPort }}
           resources: {}
       restartPolicy: Always
 status: {}
