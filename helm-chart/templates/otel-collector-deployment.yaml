@@ -40,10 +40,11 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /etc/otel-collector-config.yaml
-              name: otel-collector-claim0
+              name: otel-collector-volume
+              subPath: file-from-cfgmap
       restartPolicy: Always
       volumes:
-        - name: otel-collector-claim0
-          persistentVolumeClaim:
-            claimName: otel-collector-claim0
+        - name: otel-collector-volume
+          configMap:
+            name: otel-collector-cfgmap
 status: {}

@@ -32,10 +32,11 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /etc/prometheus/prometheus.yml
-              name: prometheus-claim0
+              name: prometheus-volume
+              subPath: file-from-cfgmap
       restartPolicy: Always
       volumes:
-        - name: prometheus-claim0
-          persistentVolumeClaim:
-            claimName: prometheus-claim0
+        - name: prometheus-volume
+          configMap:
+            name: prometheus-cfgmap
 status: {}

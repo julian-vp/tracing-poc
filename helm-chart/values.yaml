@@ -11,11 +11,63 @@ image:
 
 service:
   type: ClusterIP
-  
+
 application:
   gatewayapiPort: 80
   weathersapiPort: 80
   locationsapiPort: 80
-  otelExporterOtlpEndpoint: 'http://otel-collector:4317'
-  weathersapiEndpoint: 'http://weathersapi:5290'
-  locationsapiEndpoint: 'http://locationsapi:5218'
+  otelExporterOtlpEndpoint: 'http://otel-collector.tracing-poc.svc.cluster.local:4317'
+  weathersapiEndpoint: 'http://weathersapi.tracing-poc.svc.cluster.local'
+  locationsapiEndpoint: 'http://locationsapi.tracing-poc.svc.cluster.local'
+
+prometheus:
+  scrape_configs:
+    - job_name: 'otel-collector'
+      scrape_interval: 10s
+      static_configs:
+        - targets: ['otel-collector.tracing-poc.svc.cluster.local:8889']
+        - targets: ['otel-collector.tracing-poc.svc.cluster.local:8888']
+    - job_name: 'apis'
+      scrape_interval: 10s
+      static_configs:
+        - targets: ['locationsapi.tracing-poc.svc.cluster.local']
+        - targets: ['weathersapi.tracing-poc.svc.cluster.local']
+        - targets: ['gatewayapi.tracing-poc.svc.cluster.local']
+
+otelCollector:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+  exporters:
+    prometheus:
+      endpoint: "0.0.0.0:8889"
+      const_labels:
+        label1: value1
+    logging:
+    zipkin:
+      endpoint: "http://zipkin-all-in-one.tracing-poc.svc.cluster.local:9411/api/v2/spans"
+      format: proto
+    jaeger:
+      endpoint: jaeger-all-in-one.tracing-poc.svc.cluster.local:14250
+      tls:
+        insecure: true
+  processors:
+    batch:
+  extensions:
+    health_check:
+    pprof:
+      endpoint: :1888
+    zpages:
+      endpoint: :55679
+  service:
+    extensions: [pprof, zpages, health_check]
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [logging, zipkin, jaeger]
+      metrics:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [logging, prometheus]
