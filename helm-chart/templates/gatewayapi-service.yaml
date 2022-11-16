@@ -16,5 +16,3 @@ spec:
       targetPort: {{ .Values.application.gatewayapiPort }}
   selector:
     io.kompose.service: gatewayapi
-status:
-  loadBalancer: {}

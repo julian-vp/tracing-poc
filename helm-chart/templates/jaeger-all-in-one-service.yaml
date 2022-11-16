@@ -21,5 +21,3 @@ spec:
       targetPort: 14250
   selector:
     io.kompose.service: jaeger-all-in-one
-status:
-  loadBalancer: {}

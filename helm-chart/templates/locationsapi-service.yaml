@@ -15,5 +15,3 @@ spec:
       targetPort: {{ .Values.application.locationsapiPort }}
   selector:
     io.kompose.service: locationsapi
-status:
-  loadBalancer: {}

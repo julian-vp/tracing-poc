@@ -15,5 +15,3 @@ spec:
       targetPort: {{ .Values.application.weathersapiPort }}
   selector:
     io.kompose.service: weathersapi
-status:
-  loadBalancer: {}
