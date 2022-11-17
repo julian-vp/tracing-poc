@@ -31,7 +31,7 @@ services:
       - "8889:8889" # Prometheus exporter metrics
       - "13133:13133" # health_check extension
       - "4317:4317" # OTLP gRPC receiver
-      - "55679:55679" # zpages extension
+      # - "55679:55679" # zpages extension
     depends_on:
       - jaeger-all-in-one
       - zipkin-all-in-one
@@ -45,6 +45,7 @@ services:
       - "9090:9090"
 
   locationsapi:
+    image: ${LOCATIONSAPI_IMG}
     build:
       dockerfile: ./LocationsApi/Dockerfile
       context: .
@@ -58,6 +59,7 @@ services:
       - otel-collector
 
   weathersapi:
+    image: ${WEATHERSAPI_IMG}
     build:
       dockerfile: ./WeatherForcastApi/Dockerfile
       context: .
@@ -71,15 +73,16 @@ services:
       - otel-collector
 
   gatewayapi:
+    image: ${GATEWAYAPI_IMG}
     build:
       dockerfile: ./GatewayApi/Dockerfile
       context: .
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5208
-      - weathersapi_ENDPOINT=weathersapi:5290
-      - locationsapi_ENDPOINT=locationsapi:5218
+      - weathersapi_ENDPOINT=http://weathersapi:5290
+      - locationsapi_ENDPOINT=http://locationsapi:5218
     ports:
       - 5208:5208
     depends_on:

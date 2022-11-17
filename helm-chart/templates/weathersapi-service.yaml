@@ -10,10 +10,8 @@ metadata:
   name: weathersapi
 spec:
   ports:
-    - name: "5290"
-      port: 5290
-      targetPort: 5290
+    - name: http
+      port: {{ .Values.application.weathersapiPort }}
+      targetPort: {{ .Values.application.weathersapiPort }}
   selector:
     io.kompose.service: weathersapi
-status:
-  loadBalancer: {}

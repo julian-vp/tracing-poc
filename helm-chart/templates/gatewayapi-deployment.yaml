@@ -28,17 +28,17 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
             - name: ASPNETCORE_URLS
-              value: http://+:5208
+              value: "http://+:{{ .Values.application.gatewayapiPort }}"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: otel-collector:4317
+              value:  {{ .Values.application.otelExporterOtlpEndpoint }}
             - name: locationsapi_ENDPOINT
-              value: locationsapi:5218
+              value: {{ .Values.application.locationsapiEndpoint }}
             - name: weathersapi_ENDPOINT
-              value: weathersapi:5290
-          image: gatewayapi
+              value: {{ .Values.application.weathersapiEndpoint }}
+          image: {{ .Values.image.gatewayapiImage }}
           name: gatewayapi
           ports:
-            - containerPort: 5208
+            - containerPort: {{ .Values.application.gatewayapiPort }}
           resources: {}
       restartPolicy: Always
 status: {}

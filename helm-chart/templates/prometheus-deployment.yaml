@@ -25,17 +25,18 @@ spec:
         io.kompose.service: prometheus
     spec:
       containers:
-        - image: prom/prometheus:latest
+        - image: {{ .Values.image.prometheusImage }}
           name: prometheus
           ports:
             - containerPort: 9090
           resources: {}
           volumeMounts:
             - mountPath: /etc/prometheus/prometheus.yml
-              name: prometheus-claim0
+              name: prometheus-volume
+              subPath: file-from-cfgmap
       restartPolicy: Always
       volumes:
-        - name: prometheus-claim0
-          persistentVolumeClaim:
-            claimName: prometheus-claim0
+        - name: prometheus-volume
+          configMap:
+            name: prometheus-cfgmap
 status: {}

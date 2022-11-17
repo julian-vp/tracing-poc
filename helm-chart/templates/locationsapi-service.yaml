@@ -10,10 +10,8 @@ metadata:
   name: locationsapi
 spec:
   ports:
-    - name: "5218"
-      port: 5218
-      targetPort: 5218
+    - name: http
+      port: {{ .Values.application.locationsapiPort }}
+      targetPort: {{ .Values.application.locationsapiPort }}
   selector:
     io.kompose.service: locationsapi
-status:
-  loadBalancer: {}

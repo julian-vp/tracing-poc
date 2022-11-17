@@ -24,7 +24,7 @@ spec:
         io.kompose.service: zipkin-all-in-one
     spec:
       containers:
-        - image: openzipkin/zipkin:latest
+        - image: {{ .Values.image.zipkinImage }}
           name: zipkin-all-in-one
           ports:
             - containerPort: 9411

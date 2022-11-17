@@ -9,11 +9,10 @@ metadata:
     io.kompose.service: gatewayapi
   name: gatewayapi
 spec:
+  type: {{ .Values.service.type }}
   ports:
-    - name: "5208"
-      port: 5208
-      targetPort: 5208
+    - name: http
+      port: {{ .Values.application.gatewayapiPort }}
+      targetPort: {{ .Values.application.gatewayapiPort }}
   selector:
     io.kompose.service: gatewayapi
-status:
-  loadBalancer: {}

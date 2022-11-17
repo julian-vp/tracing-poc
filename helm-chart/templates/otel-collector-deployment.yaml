@@ -28,7 +28,7 @@ spec:
         - args:
             - --config=/etc/otel-collector-config.yaml
             - ""
-          image: otel/opentelemetry-collector-contrib-dev:latest
+          image: {{ .Values.image.otelImage }}
           name: otel-collector
           ports:
             - containerPort: 1888
@@ -40,10 +40,11 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /etc/otel-collector-config.yaml
-              name: otel-collector-claim0
+              name: otel-collector-volume
+              subPath: file-from-cfgmap
       restartPolicy: Always
       volumes:
-        - name: otel-collector-claim0
-          persistentVolumeClaim:
-            claimName: otel-collector-claim0
+        - name: otel-collector-volume
+          configMap:
+            name: otel-collector-cfgmap
 status: {}
