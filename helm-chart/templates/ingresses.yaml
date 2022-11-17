@@ -10,7 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
-    - host: tse-test-app-euw.deploy.systems.next
+    - host: [host]
       http:
         paths:
           - path: /gatewayapi/(.*)
@@ -20,49 +20,3 @@ spec:
                 name: gatewayapi
                 port:
                   number: 80
-# ---
-# kind: Ingress
-# apiVersion: networking.k8s.io/v1
-# metadata:
-#   name: prometheus
-#   labels:
-#     io.kompose.service: prometheus
-#   annotations:
-#     kubernetes.io/ingress.class: nginx
-#     nginx.ingress.kubernetes.io/rewrite-target: /$1
-#     nginx.ingress.kubernetes.io/use-regex: 'true'
-# spec:
-#   rules:
-#     - host: tse-test-app-euw.deploy.systems.next
-#       http:
-#         paths:
-#           - path: /prometheus/?(.*)
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: prometheus
-#                 port:
-#                   number: 80
-# ---
-# kind: Ingress
-# apiVersion: networking.k8s.io/v1
-# metadata:
-#   name: jaeger-all-in-one
-#   labels:
-#     io.kompose.service: jaeger-all-in-one
-#   annotations:
-#     kubernetes.io/ingress.class: nginx
-#     nginx.ingress.kubernetes.io/rewrite-target: /$1
-#     nginx.ingress.kubernetes.io/use-regex: 'true'
-# spec:
-#   rules:
-#     - host: tse-test-app-euw.deploy.systems.next
-#       http:
-#         paths:
-#           - path: /jaeger-all-in-one/(.*)
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: jaeger-all-in-one
-#                 port:
-#                   number: 16686

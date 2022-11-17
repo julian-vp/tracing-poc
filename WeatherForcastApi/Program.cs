@@ -20,7 +20,7 @@ builder.Services.AddOpenTelemetryTracing(b =>
     b
        .AddOtlpExporter(opt =>
        {
-           opt.Endpoint = new Uri(Environment.GetEnvironmentVariable("otelcollectorUrl") ?? "");
+           opt.Endpoint = new Uri(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT") ?? "");
            opt.Protocol = OtlpExportProtocol.Grpc;
        })
        .AddSource(assembly.GetName().Name)
